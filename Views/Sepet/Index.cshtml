@@ -1,0 +1,83 @@
+@model SinemaOtomasyonu.Models.SepetOzetModel
+@{
+    ViewData["Title"] = "Sepetim";
+    decimal toplamTutar = 0;
+}
+
+<div class="container mt-4">
+    <h2>🛒 Sepet Özeti</h2>
+
+    <div class="row">
+        <div class="col-md-8">
+            @if (Model.SecilenFilm != null)
+            {
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header bg-info text-white fw-bold">🎫 Bilet Bilgileri (@Model.BiletTipi)</div>
+                    <div class="card-body">
+                        <h5>@Model.SecilenFilm.FilmAdi</h5>
+                        <p>
+                            Koltuk No: <strong>@Model.SecilenKoltukNo</strong><br />
+                            Bilet Fiyatı:
+                            @if (Model.BiletTipi == "Ogrenci")
+                            {
+                                // HESAPLAMA (C#)
+                                decimal indirimliFiyat = Model.SecilenFilm.Fiyat * 0.80m;
+                                toplamTutar += indirimliFiyat;
+
+                                // HTML ÇIKTISI
+                                <span class="text-success fw-bold">@indirimliFiyat.ToString("C2") (%20 İndirimli)</span>
+                            }
+                            else
+                            {
+                                // HESAPLAMA (C#)
+                                toplamTutar += Model.SecilenFilm.Fiyat;
+
+                                // HTML ÇIKTISI
+                                <span class="fw-bold">@Model.SecilenFilm.Fiyat.ToString("C2")</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            }
+
+            @if (Model.BufeUrunleri.Any())
+            {
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header bg-warning text-dark fw-bold">🍿 Büfe Ürünleri</div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var urun in Model.BufeUrunleri)
+                            {
+                                // HESAPLAMA (En başta yapıyoruz ki HTML karışmasın)
+                                toplamTutar += urun.ToplamTutar;
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@urun.UrunAdi (x @urun.Adet)</span>
+                                    <span class="fw-bold">@urun.ToplamTutar.ToString("C2")</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="text-center text-muted">Toplam Tutar</h3>
+                    <h1 class="text-center text-success fw-bold my-3">@toplamTutar.ToString("C2")</h1>
+                    <hr />
+                    
+                    <a asp-controller="Odeme" asp-action="Index" class="btn btn-success btn-lg w-100 mb-2">
+                        💳 Ödeme Ekranına Geç
+                    </a>
+
+                    <a asp-action="SepetiBosalt" class="btn btn-outline-danger w-100">
+                        🗑️ Sepeti Boşalt
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

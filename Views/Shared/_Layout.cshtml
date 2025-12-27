@@ -1,0 +1,96 @@
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sinema Otomasyonu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <style>
+        body { padding-top: 60px; background-color: #f8f9fa; }
+        .footer { position: fixed; bottom: 0; width: 100%; height: 60px; line-height: 60px; background-color: #f5f5f5; }
+        .koltuk { width: 40px; height: 40px; margin: 5px; cursor: pointer; text-align: center; line-height: 40px; border-radius: 5px; color: white; }
+        .koltuk.dolu { background-color: red; cursor: not-allowed; pointer-events: none; }
+        .koltuk.bos { background-color: green; }
+        .koltuk.secili { background-color: orange; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Giris" asp-action="Index">Sinema Otomasyonu</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @{
+                            var rol = Context.Session.GetString("Rol");
+                        }
+                        
+                        @if (rol == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Yonetim" asp-action="Index">Yönetim Paneli</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Yonetim" asp-action="FilmEkle">Film Ekle</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Bilet" asp-action="Index">Bilet Al</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                         @if (!string.IsNullOrEmpty(rol))
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-dark">Merhaba, @Context.Session.GetString("AdSoyad")</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-controller="Giris" asp-action="CikisYap">Çıkış Yap</a>
+                            </li>
+                        }
+                        else
+                        {
+                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Giris" asp-action="Index">Giriş Yap</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @if (TempData["Hata"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["Hata"]
+                </div>
+            }
+             @if (ViewBag.Hata != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Hata
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted text-center">
+        <div class="container">
+            &copy; 2024 - Sinema Otomasyonu - <a href="#">Gizlilik</a>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

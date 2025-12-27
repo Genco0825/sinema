@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Güvenli Ödeme";
+    // Controller'dan gelen tutarı al, yoksa 0 yaz
+    decimal toplamTutar = ViewBag.ToplamTutar ?? 0;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">💳 Güvenli Ödeme</h3>
+                </div>
+                <div class="card-body p-4">
+                    
+                    @if (TempData["Hata"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            ⚠️ @TempData["Hata"]
+                        </div>
+                    }
+
+                    <div class="alert alert-info text-center mb-4">
+                        Ödenecek Tutar: <strong class="fs-4 text-primary">@toplamTutar.ToString("C2")</strong>
+                    </div>
+
+                    <form asp-action="OdemeYap" method="post">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Kart Üzerindeki İsim</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Ad Soyad" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Kart Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">💳</span>
+                                <input type="text" name="kartNo" class="form-control form-control-lg" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">SKT (Ay/Yıl)</label>
+                                <div class="d-flex gap-2">
+                                    <select name="sktAy" class="form-select" required>
+                                        <option value="">Ay</option>
+                                        @for (int i = 1; i <= 12; i++) { <option value="@i">@i.ToString("00")</option> }
+                                    </select>
+                                    <select name="sktYil" class="form-select" required>
+                                        <option value="">Yıl</option>
+                                        @for (int i = 2025; i <= 2035; i++) { <option value="@i">@i</option> }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">CVV</label>
+                                <input type="text" name="cvv" class="form-control form-control-lg" placeholder="123" maxlength="3" required>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg fw-bold shadow-sm">
+                                ✅ Ödemeyi Onayla (@toplamTutar.ToString("C2"))
+                            </button>
+                            <a asp-controller="Sepet" asp-action="Index" class="btn btn-outline-secondary">
+                                🔙 Sepete Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-3 text-muted">
+                <small>🔒 256-bit SSL ile güvenli ödeme (Simülasyon)</small>
+            </div>
+        </div>
+    </div>
+</div>

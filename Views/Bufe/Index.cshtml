@@ -1,0 +1,61 @@
+@model List<SinemaOtomasyonu.Models.BufeUrun>
+@{
+    ViewData["Title"] = "Büfe";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">🍿 Adım 4: Büfe Ürünleri</h2>
+        <a asp-controller="Sepet" asp-action="Index" class="btn btn-warning btn-lg shadow-sm">
+            Ödemeye Geç &rarr;
+        </a>
+    </div>
+
+    <div class="row">
+        @foreach (var urun in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title fw-bold">@urun.UrunAdi</h5>
+                        <p class="card-text fs-4 text-success fw-bold">@urun.Fiyat ₺</p>
+                        
+                        <div class="mb-3">
+                            @if (urun.StokAdeti > 0)
+                            {
+                                <span class="badge bg-info text-dark">Stok: @urun.StokAdeti</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger p-2">TÜKENDİ</span>
+                            }
+                        </div>
+                        
+                        <div class="mt-auto">
+                            @if (urun.StokAdeti > 0)
+                            {
+                                <form asp-action="SepeteEkle" method="post">
+                                    <input type="hidden" name="urunId" value="@urun.UrunId" />
+                                    <div class="input-group">
+                                        <input type="number" name="adet" class="form-control text-center" value="1" min="1" max="@urun.StokAdeti" />
+                                        <button class="btn btn-primary" type="submit">Ekle ➕</button>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary w-100" disabled>Stok Yok</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+            ⬅️ Önceki Sayfaya Dön
+        </a>
+    </div>
+</div>

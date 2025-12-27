@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Koltuk Seç";
+    var doluKoltuklar = ViewBag.DoluKoltuklar as List<int> ?? new List<int>();
+    var kapasite = (int)ViewBag.Kapasite;
+}
+
+<h2>Adım 3: Koltuk Seçiniz</h2>
+
+<div class="d-flex flex-wrap justify-content-center mt-4 p-4 border rounded bg-dark">
+    @for (int i = 1; i <= kapasite; i++)
+    {
+        bool isDolu = doluKoltuklar.Contains(i);
+        string sinif = isDolu ? "dolu" : "bos";
+        
+        if (isDolu)
+        {
+             <div class="koltuk @sinif">@i</div>
+        }
+        else
+        {
+             <form asp-action="KoltukSec" method="post">
+                <input type="hidden" name="koltukNo" value="@i" />
+                <button type="submit" class="koltuk @sinif border-0">@i</button>
+             </form>
+        }
+    }
+</div>
+
+<div class="mt-3 text-center">
+    <span class="badge bg-success">Boş</span>
+    <span class="badge bg-danger">Dolu</span>
+</div>

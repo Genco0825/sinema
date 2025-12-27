@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Bilet Tipi Seç";
+}
+
+<div class="container text-center mt-5">
+    <h2>Adım 1: Bilet Tipini Seçiniz</h2>
+    <form asp-action="BiletTipiSec" method="post" class="mt-4">
+        <div class="d-grid gap-3 col-6 mx-auto">
+            <button type="submit" name="biletTipi" value="Tam" class="btn btn-outline-primary btn-lg">Tam Bilet</button>
+            <button type="submit" name="biletTipi" value="Ogrenci" class="btn btn-outline-success btn-lg">Öğrenci Bileti (%20 İndirim)</button>
+        </div>
+    </form>
+</div>

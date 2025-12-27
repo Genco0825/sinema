@@ -1,0 +1,28 @@
+@model List<SinemaOtomasyonu.Models.Seans>
+@{
+    ViewData["Title"] = "Seans Seç";
+}
+
+<h2>Adım 2: Bir Seans Seçiniz</h2>
+
+<div class="row mt-4">
+    @foreach (var seans in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@seans.Film?.FilmAdi</h5>
+                    <p class="card-text">
+                        <strong>Salon:</strong> @seans.Salon?.SalonAdi<br />
+                        <strong>Saat:</strong> @seans.BaslangicSaati.ToString("dd.MM.yyyy HH:mm")<br />
+                        <strong>Fiyat:</strong> @seans.Film?.Fiyat ₺
+                    </p>
+                    <form asp-action="SeansSec" method="post">
+                        <input type="hidden" name="seansId" value="@seans.SeansId" />
+                        <button type="submit" class="btn btn-primary w-100">Seç</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
